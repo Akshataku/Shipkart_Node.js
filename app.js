@@ -9,6 +9,7 @@ const url = "mongodb://127.0.0.1:27017/shipkart"
 const productRoutes = require('./api/routes/products');
 const customerRoutes = require('./api/routes/customers');
 const orderRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/user');
 
 // mongoose.connect('mongodb+srv://akshat_garg_07:'+ process.env.MONGO_ATLAS_PW +'@cluster0.acgi0kx.mongodb.net/?retryWrites=true&w=majority');
 mongoose.connect(url,{})
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
 app.use('/products',productRoutes);
 app.use('/customers',customerRoutes);
 app.use('/orders',orderRoutes);
+app.use('/user',userRoutes);
 
 //when upper 2 routes are not able to handle
 //then below code will handle errors
