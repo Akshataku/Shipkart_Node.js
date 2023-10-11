@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
-router.post('/signup', (req, res, next) => {
+router.post('/', (req, res, next) => {
     User.find({email:req.body.email})
     .exec()
     .then(user => {
@@ -16,39 +16,74 @@ router.post('/signup', (req, res, next) => {
             return res.status(409).json({
                 message:'E-mail already exists'
             });
-        } 
-        else{
-            bcrypt.hash(req.body.password,10, (err, hash) => {
-                if(err){
-                    return res.status(500).json({
-                        error: err
-                    });
-                } else{
-                    const user = new User({
-                        _id: new mongoose.Types.ObjectId(),
-                        firstname: req.body.firstname,
-                        lastname: req.body.lastname,
-                        email: req.body.email,
-                        password: hash
-                    });
-                    user.save()
-                    .then(result =>{
-                        console.log(result);
-                        res.status(201).json({
-                            message: 'User Created'
-                        });
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        res.status(500).json({
-                            error: err
-                        });
-                    });
-                }
-            });
         }
-    });
+        else{
+            
+            const user = new User({
+                _id: new mongoose.Types.ObjectId(),
+                firstname: req.body.firstName,
+                lastname: req.body.lastName,
+                email: req.body.email
+            });
+            user.save()
+            .then(result =>{
+                console.log(result);
+                res.status(201).json({
+                    message: 'User Created'
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+            });
+
+        }
+    })
 });
+
+// router.post('/signup', (req, res, next) => {
+//     User.find({email:req.body.email})
+//     .exec()
+//     .then(user => {
+//         if(user.length > 0){
+//             return res.status(409).json({
+//                 message:'E-mail already exists'
+//             });
+//         } 
+//         else{
+//             bcrypt.hash(req.body.password,10, (err, hash) => {
+//                 if(err){
+//                     return res.status(500).json({
+//                         error: err
+//                     });
+//                 } else{
+//                     const user = new User({
+//                         _id: new mongoose.Types.ObjectId(),
+//                         firstname: req.body.firstname,
+//                         lastname: req.body.lastname,
+//                         email: req.body.email,
+//                         password: hash
+//                     });
+//                     user.save()
+//                     .then(result =>{
+//                         console.log(result);
+//                         res.status(201).json({
+//                             message: 'User Created'
+//                         });
+//                     })
+//                     .catch(err => {
+//                         console.log(err);
+//                         res.status(500).json({
+//                             error: err
+//                         });
+//                     });
+//                 }
+//             });
+//         }
+//     });
+// });
 
 router.post('/login', (req, res, next) => {
     User.find({email: req.body.email})
@@ -68,11 +103,11 @@ router.post('/login', (req, res, next) => {
                 }
                 if(result){
                     //json web token
-                    //const token = jwt.sign({email: user[0].email, userId: user[0]._id }, process.env.JWT_KEY, {expiresIn:"1h"});
+                    const token = jwt.sign({email: user[0].email, userId: user[0]._id }, process.env.JWT_KEY, {expiresIn:"1h"});
 
                     return res.status(200).json({
                         message: 'Auth Successful',
-                        //token: token
+                        token: token
                     });
                 }
                 return res.status(401).json({
