@@ -7,7 +7,6 @@ const url = "mongodb://127.0.0.1:27017/shipkart"
 
 
 const productRoutes = require('./api/routes/products');
-const customerRoutes = require('./api/routes/customers');
 const orderRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/user');
 
@@ -40,7 +39,6 @@ app.use((req, res, next) => {
 
 //routes which should handle requests
 app.use('/products',productRoutes);
-app.use('/customers',customerRoutes);
 app.use('/orders',orderRoutes);
 app.use('/user',userRoutes);
 
