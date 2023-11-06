@@ -69,9 +69,13 @@ router.post('/signup', (req, res, next) => {
                     user.save()
                     .then(result =>{
                         console.log(result);
+                        //res.json({userID: user._id});
                         res.status(201).json({
-                            message: 'User Created'
+                            message: 'User Created',
+                            userID: user._id
+
                         });
+                        //res.json({userId:user._id});
                     })
                     .catch(err => {
                         console.log(err);
